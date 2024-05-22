@@ -1,0 +1,33 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/meme_db?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: mydb
+    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.type: trace
+
+custom:
+  jwt:
+    header: Authorization
+    #HS512 알고리즘을 사용할 것이기 때문에 512bit, 즉 64byte 이상의 secret key를 사용해야 한다.
+    secretKey: bWVtZW1vYS1pcy10aGUtYmVzdC13ZWItYXBwbGljYXRpb24taW4tdGhlLXdvcmxkLWp3dC1zZWNyZXRlLWtleS1reWlt
+    token-validity-in-seconds: 86400	# 초
+
+kakao:
+  key:
+    client-id: 49b6f98c5dc61d132d5a70211963f5ce
+  dev: http://localhost:8080/api/users/login/oauth/kakao
+  prod: https://mememoa.com/api/users/login/oauth/kakao
