@@ -1,5 +1,5 @@
 package bside.meme.content;
 
 public enum Category {
-    웃김, 고마움, 분노, 귀여운, 미안
+    웃김, 감사, 분노, 큐트, 미안
 }

@@ -26,17 +26,19 @@ public class UserRepository {
         return user.getUserId();
     }
 
-    public User findOne(Long id){
-        return em.find(User.class, id);
+    public Optional<User> findById(Long userId) {
+        try {
+            User user = em.createQuery("select m from User m where m.userId = :user_id", User.class)
+                    .setParameter("user_id", userId)
+                    .getSingleResult();
+            return Optional.of(user);
+        } catch (NoResultException e) {
+            System.out.println("###" + e);
+            return Optional.empty();
+        }
     }
-
     public List<User> findAll(){
         return em.createQuery("select m from User m", User.class)
-                .getResultList();
-    }
-    public List<User> findByName(String name){
-        return em.createQuery("select m from User m where m.name = :name", User.class)
-                .setParameter("name", name)
                 .getResultList();
     }
 

@@ -21,8 +21,4 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Content> contents = new ArrayList<>();
-
-    public User orElse(Object o) {
-        return null;
-    }
 }

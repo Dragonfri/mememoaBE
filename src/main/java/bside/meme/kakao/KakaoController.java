@@ -1,14 +1,19 @@
 package bside.meme.kakao;
 
+import bside.meme.user.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.util.NoSuchElementException;
 
 @RestController
@@ -18,7 +23,6 @@ import java.util.NoSuchElementException;
 public class KakaoController {
 
     private final KakaoService kakaoService;
-
     //web 버전
     @ResponseBody
     @GetMapping("/login/oauth/kakao")

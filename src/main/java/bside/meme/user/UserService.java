@@ -1,7 +1,10 @@
 package bside.meme.user;
 
+import bside.meme.content.Content;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -17,5 +20,9 @@ public class UserService {
 
     private void validateDuplicateUser(User user) {
     }
-    //회원 저넻조회
+
+    public Optional<User> getUserById(Long id) {
+        return userRepository.findById(id);
+    }
+
 }

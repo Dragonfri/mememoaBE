@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,6 +40,9 @@ public class KakaoService {
     @Value("${kakao.prod}")
     private String prodRedirectUri;
 
+    @Value("${meme.project.host}")
+    private String basicURI;
+
     public LoginResponse kakaoLogin(String code, String currentDomain) {
         //0. 동적으로 redirect URI 선택
         String redirectUri=selectRedirectUri(currentDomain);
@@ -59,7 +63,7 @@ public class KakaoService {
     private String selectRedirectUri(String currentDomain) {
         if (currentDomain.contains("localhost")) {
             return devRedirectUri;
-        } else if (currentDomain.contains("yourproductiondomain.com")) {
+        } else if (currentDomain.contains(basicURI)) {
             return prodRedirectUri;
         } else {
             throw new NoSuchElementException("No matching redirect URI for the current domain: " + currentDomain);
@@ -68,7 +72,6 @@ public class KakaoService {
 
     //1. "인가 코드"로 "액세스 토큰" 요청
     private String getAccessToken(String code, String redirectUri) {
-
         // HTTP Header 생성
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
