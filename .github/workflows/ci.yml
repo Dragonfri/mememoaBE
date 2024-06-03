@@ -16,12 +16,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Start SSH agent
-        run: eval $(ssh-agent -s)
-
-      - name: Add SSH private key to agent
-        run: echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
-
       - name: Set up JDK 17
         uses: actions/setup-java@v2
         with:
@@ -40,6 +34,9 @@ jobs:
 
       - name: Build with Gradle
         run: chmod +x gradlew && ./gradlew build -x test
+
+      - name: Start SSH agent
+        run: eval $(ssh-agent) && ssh-add <(echo "$SSH_PRIVATE_KEY") && ssh-add -l
 
       - name: Deploy to server
         if: github.ref == 'refs/heads/main'
