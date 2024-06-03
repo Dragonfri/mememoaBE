@@ -35,11 +35,6 @@ jobs:
       - name: Build with Gradle
         run: chmod +x gradlew && ./gradlew build -x test
 
-      - name: Start SSH agent
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        run: eval $(ssh-agent) && ssh-add <(echo "$SSH_PRIVATE_KEY") && ssh-add -l
-
       - name: Deploy to server
         if: github.ref == 'refs/heads/main'
         env:
@@ -47,9 +42,10 @@ jobs:
           SERVER_IP: 210.89.189.73  # 서버의 공인 IP 주소
           DEPLOY_PATH: /var/www/mememoa/BE  # 서버의 배포 경로
           PORT: 1024  # 서버의 SSH 포트 번호
+          SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}  # 비밀번호 시크릿
         run: |
-          scp -P $PORT -o StrictHostKeyChecking=no build/libs/*.jar $USER@$SERVER_IP:$DEPLOY_PATH
-          ssh -p $PORT -o StrictHostKeyChecking=no $USER@$SERVER_IP << EOF
+          echo "${SSH_PASSWORD}" | sshpass -p "${SSH_PASSWORD}" scp -P $PORT -o StrictHostKeyChecking=no build/libs/*.jar $USER@$SERVER_IP:$DEPLOY_PATH
+          echo "${SSH_PASSWORD}" | sshpass -p "${SSH_PASSWORD}" ssh -p $PORT -o StrictHostKeyChecking=no $USER@$SERVER_IP << EOF
             pkill -f 'java -jar'
             nohup java -jar $DEPLOY_PATH/$(basename build/libs/*.jar) > $DEPLOY_PATH/nohup.out 2>&1 &
           EOF
