@@ -38,11 +38,11 @@ jobs:
       - name: Deploy to server
         if: github.ref == 'refs/heads/main'
         env:
-          USER: root  # 서버의 사용자 이름
-          SERVER_IP: 210.89.189.73  # 서버의 공인 IP 주소
-          DEPLOY_PATH: /var/www/mememoa/BE  # 서버의 배포 경로
-          PORT: 1024  # 서버의 SSH 포트 번호
           SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}  # 비밀번호 시크릿
+          USER: ${{ secrets.USER }}  # 서버의 사용자 이름
+          SERVER_IP: ${{ secrets.SERVER_IP }}  # 서버의 공인 IP 주소
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}  # 서버의 배포 경로
+          PORT: ${{ secrets.PORT }}  # 서버의 SSH 포트 번호
         run: |
           echo "${SSH_PASSWORD}" | sshpass -p "${SSH_PASSWORD}" scp -P $PORT -o StrictHostKeyChecking=no build/libs/*.jar $USER@$SERVER_IP:$DEPLOY_PATH
           echo "${SSH_PASSWORD}" | sshpass -p "${SSH_PASSWORD}" ssh -p $PORT -o StrictHostKeyChecking=no $USER@$SERVER_IP << EOF
